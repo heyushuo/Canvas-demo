@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function(doc, win) {
+      var docEl = doc.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+      var recalc = function() {
+        var clientWidth = docEl.clientWidth || window.innerWidth;
+        if (!clientWidth) return;
+        var fz = clientWidth / 7.5;
+        fz = (fz > 100 ? 100 : fz);
+        docEl.style.fontSize = fz + 'px';
+        win._fz = fz;
+      };
+      if (!doc.addEventListener) return;
+      win.addEventListener(resizeEvt, recalc, false);
+      doc.addEventListener('DOMContentLoaded', recalc, false);
+      recalc();
+    })(document, window);
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    #canvas {
+      background: black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id='canvas'>
+  </canvas>
+  <!-- <img src="./images/kebi.jpg" alt=""> -->
+</body>
+
+</html>
+<script>
+  var img;
+  var canvas = document.getElementById("canvas");
+  var rem = document.body.clientWidth / 7.5;
+  var WIDTH = canvas.width = 7.5 * rem;
+  var HEIGHT = canvas.height = 7.5 * rem;
+  var ctx = canvas.getContext("2d");
+  loadImg()
+
+  function drawImage(x = 0, y = 0) {
+    console.log(x * rem);
+    console.log(y * rem);
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    // ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.drawImage(img, //规定要使用的图像、画布或视频。
+      x, //在画布上放置图像的 x 、y坐标位置。
+      y, 0.88 * rem, 0.88 * rem, //要使用的图像的宽度、高度
+    );
+  }
+
+  function loadImg() {
+    img = new Image();
+    img.onload = function() {
+      drawImage();
+    }
+    img.src = './images/logo.png';
+  }
+  canvas.addEventListener('touchstart', function(e) {
+    console.log(e);
+  })
+  canvas.addEventListener('touchmove', function(e) {
+    var x = e.touches[0].clientX;
+    var y = e.touches[0].clientY
+    // console.log(x);
+    // console.log(y);
+    drawImage(x, y)
+  })
+</script>
